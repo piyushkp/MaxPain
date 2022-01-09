@@ -3,3 +3,5 @@ numpy>=1.16.5
 requests>=2.26
 multitasking>=0.0.7
 lxml>=4.5.1
+yahoo-fin=0.8.9.1
+html5lib
