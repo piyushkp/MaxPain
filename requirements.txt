@@ -5,3 +5,4 @@ multitasking>=0.0.7
 lxml>=4.5.1
 yahoo-fin=0.8.9.1
 html5lib
+tinydb
