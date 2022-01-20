@@ -28,8 +28,8 @@ def max_pain(date="2022-01-07", symbol="MSFT"):
             maxpain = maxpain.append({"price" : price, "putcash" : putcash, "callcash": callcash, "total" : putcash + callcash}, ignore_index = True)
 
         mp = maxpain.sort_values(by="total").iloc[0]["price"]
-        cp = get_current_price(symbol)
-
+        mp_POI = None
+        mp_COI = None
         for index, row in data.iterrows():
             strike = row['strike']
             if strike == mp:
@@ -41,7 +41,8 @@ def max_pain(date="2022-01-07", symbol="MSFT"):
         #print(maxpain.sort_values(by="total"))
         #print("{0}={1}   {2}   MaxPain: {3}".format(symbol, cp, date, mp))
         return mp, mp_COI, mp_POI
-    except:
+    except BaseException as err:
+        print("exception: {0}.".format(err))
         return None, None, None
 
 

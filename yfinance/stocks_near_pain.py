@@ -9,10 +9,10 @@ def get_stocks_around_max_pain(date, symbols):
                 cp = get_current_price(symbol)
                 per = percentage(cp, mp)
                 oi = percentage(mp_COI, mp_POI)
-                if (per >= 1 and per <= 20) or (per >= 100 and per <= 120):
+                if (per >= 80 and per <= 120):
                     print("{0}={1}   date={2}   MaxPain={3}   call_OI={4}   put_OI={5}".format(symbol, cp, date, mp, mp_COI, mp_POI))
                     mp_list.append((symbol, cp, date, mp, mp_COI, mp_POI))
-                    if (oi >= 60 and oi <= 100) or (oi>= 100 and oi <= 160):
+                    if (oi >= 80 and oi <= 120):
                         print("{0}={1}   date={2}   strangle={3}   call_OI={4}   put_OI={5}".format(symbol, cp, date, mp, mp_COI, mp_POI))
     return mp_list
 
