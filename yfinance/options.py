@@ -7,8 +7,6 @@ import yfinance as yf
 def options_chain_by_date(symbol, date):
 
     tk = yf.Ticker(symbol)
-    # Expiration dates
-    exps = tk.options
     # Get options for each expiration
     options = pd.DataFrame()
     opt = tk.option_chain(date=date)
