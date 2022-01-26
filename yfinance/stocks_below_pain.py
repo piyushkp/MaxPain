@@ -1,6 +1,7 @@
 from maxpain import *
 import logging
 logging.getLogger("urllib3").setLevel(logging.WARNING)
+import sys
 
 def get_stocks_below_max_pain(date, symbols):
     mp_list = []
@@ -16,7 +17,9 @@ def get_stocks_below_max_pain(date, symbols):
     return mp_list
 
 if __name__ == "__main__":
-    #symbols = get_stock_symbols()
-    symbols = read_csv_file("yfinance/maxpain.csv")
-    print(symbols)
-    get_stocks_below_max_pain(date="2022-01-21", symbols=symbols)
+    args = sys.argv[1:]
+    if len(args) == 2 and args[0] == '-date':
+        #symbols = get_stock_symbols()
+        symbols = read_csv_file("yfinance/maxpain.csv")
+        print(symbols)
+        get_stocks_below_max_pain(date="2022-02-18", symbols=symbols)

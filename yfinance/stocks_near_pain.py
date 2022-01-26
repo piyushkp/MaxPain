@@ -1,4 +1,5 @@
 from maxpain import *
+import sys
 
 def get_stocks_around_max_pain(date, symbols):
     mp_list = []
@@ -17,6 +18,8 @@ def get_stocks_around_max_pain(date, symbols):
     return mp_list
 
 if __name__ == "__main__":
-    #symbols = get_stock_symbols()
-    symbols = read_csv_file("yfinance/maxpain.csv")
-    get_stocks_around_max_pain(date="2022-01-21", symbols=symbols)
+    args = sys.argv[1:]
+    if len(args) == 2 and args[0] == '-date':
+        #symbols = get_stock_symbols()
+        symbols = read_csv_file("yfinance/maxpain.csv")
+        get_stocks_around_max_pain(date=args[1], symbols=symbols)
