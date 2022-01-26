@@ -22,4 +22,4 @@ if __name__ == "__main__":
         #symbols = get_stock_symbols()
         symbols = read_csv_file("yfinance/maxpain.csv")
         print(symbols)
-        get_stocks_below_max_pain(date="2022-02-18", symbols=symbols)
+        get_stocks_below_max_pain(date=args[1], symbols=symbols)
