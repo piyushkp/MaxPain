@@ -1,5 +1,7 @@
 import yfinance as yf
 from maxpain import max_pain, get_current_price
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 def get_index_maxpain():
     for symbol in ["QQQ", "SPY", "^ndx", "^spx", "^RUT", "IWM", "DIA"]:

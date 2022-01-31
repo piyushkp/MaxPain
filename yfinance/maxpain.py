@@ -7,6 +7,8 @@ from pandas_datareader import data
 import os
 from yahoo_fin import stock_info as si
 logging.getLogger("urllib3").setLevel(logging.WARNING)
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 def max_pain(date="2022-01-07", symbol="MSFT"):
     try:
@@ -42,7 +44,7 @@ def max_pain(date="2022-01-07", symbol="MSFT"):
         #print("{0}={1}   {2}   MaxPain: {3}".format(symbol, cp, date, mp))
         return mp, mp_COI, mp_POI
     except BaseException as err:
-        print("exception: {0}.".format(err))
+        #print("exception: {0}.".format(err))
         return None, None, None
 
 

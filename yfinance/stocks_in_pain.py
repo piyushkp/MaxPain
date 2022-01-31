@@ -1,5 +1,7 @@
 from maxpain import *
 import sys
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 def get_stocks_in_max_pain(date, symbols):
     mp_list = []

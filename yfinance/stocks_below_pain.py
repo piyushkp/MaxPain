@@ -2,12 +2,14 @@ from maxpain import *
 import logging
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 import sys
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 def get_stocks_below_max_pain(date, symbols):
     mp_list = []
     for symbol in symbols:
         mp, mp_COI, mp_POI = max_pain(date, symbol)
-        if mp is not None:
+        if None not in  (mp, mp_COI, mp_POI ):
             if mp_COI + mp_POI > 5000:
                 cp = get_current_price(symbol)
                 per = percentage(cp, mp)
