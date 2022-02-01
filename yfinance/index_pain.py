@@ -9,8 +9,8 @@ def get_index_maxpain():
         exps = tk.options
         cp = get_current_price(symbol)
         for index, tuple in enumerate(exps):
-            mp, mp_COI, mp_POI = max_pain(date=exps[index], symbol=symbol)
-            print("{0}={1}   Date={2}   MaxPain={3}   call_OI={4}   put_OI={5}".format(symbol, cp, exps[index], mp, mp_COI, mp_POI))
+            mp, mp_COI, mp_POI, total = max_pain(date=exps[index], symbol=symbol)
+            print("{0}={1}   Date={2}   MaxPain={3}   call_OI={4}   put_OI={5}  $={6}".format(symbol, cp, exps[index], mp, mp_COI, mp_POI, total))
             if index == 12:
                 break
 

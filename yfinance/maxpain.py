@@ -3,6 +3,7 @@ import yfinance as yf
 import options as op
 import pandas as pd
 import logging
+import math
 from pandas_datareader import data
 import os
 from yahoo_fin import stock_info as si
@@ -10,7 +11,7 @@ logging.getLogger("urllib3").setLevel(logging.WARNING)
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
-def max_pain(date="2022-01-07", symbol="MSFT"):
+def max_pain(date, symbol):
     try:
         data = op.options_chain_by_date(symbol, date)
         maxpain = pd.DataFrame()  
@@ -40,9 +41,9 @@ def max_pain(date="2022-01-07", symbol="MSFT"):
                 else:
                     mp_COI = row['openInterest']
 
-        #print(maxpain.sort_values(by="total"))
+        total = millify(maxpain.sort_values(by="total").iloc[0]["total"])
         #print("{0}={1}   {2}   MaxPain: {3}".format(symbol, cp, date, mp))
-        return mp, mp_COI, mp_POI
+        return mp, mp_COI, mp_POI, total
     except BaseException as err:
         #print("exception: {0}.".format(err))
         return None, None, None
@@ -98,6 +99,14 @@ def percentage(part, whole):
     percentage = 100 * float(part)/float(whole)
     return percentage
 
+millnames = ['',' Thousand',' Million',' Billion',' Trillion']
+
+def millify(n):
+    n = float(n)
+    millidx = max(0,min(len(millnames)-1,
+                        int(math.floor(0 if n == 0 else math.log10(abs(n))/3))))
+
+    return '{:.0f}{}'.format(n / 10**(3 * millidx), millnames[millidx])
 
 def read_csv_file(csvfile):
     tickers = []
