@@ -46,7 +46,7 @@ def max_pain(date, symbol):
         return mp, mp_COI, mp_POI, total
     except BaseException as err:
         #print("exception: {0}.".format(err))
-        return None, None, None
+        return None, None, None, None
 
 
 def get_strike_prices(data):
