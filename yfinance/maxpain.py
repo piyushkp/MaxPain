@@ -20,25 +20,22 @@ def max_pain(date, symbol):
             putcash = callcash = credit = 0.0
             for index, row in data.iterrows():
                 strike = row['strike']
-                if strike > price:
-                    if row["CALL"] == False:
-                        oi = row['openInterest']
-                        if pd.isna(oi) is False:
+                oi = row['openInterest']
+                if pd.isna(oi) is False:
+                    if pd.isna(row['volume']) is False:
+                        oi += int(row['volume'])
+                    if strike > price:
+                        if row["CALL"] == False:
                             putcash += (strike - price) * oi * 100
-                    else:
-                        if pd.isna(row['openInterest']) is False:
-                            credit += (strike - price) * row['openInterest'] * 100
-                elif strike < price:
-                    if row["CALL"] == True:
-                        oi = row['openInterest']
-                        if pd.isna(oi) is False:
+                        else:
+                            credit += (strike - price) * oi * 100
+                    elif strike < price:
+                        if row["CALL"] == True:
                             callcash += (price - strike) * oi * 100
+                        else:
+                            credit += (price - strike) * oi * 100
                     else:
-                        if pd.isna(row['openInterest']) is False:
-                            credit += (price - strike) * row['openInterest'] * 100
-                else:
-                    if pd.isna(row['openInterest']) is False:
-                            credit += row['openInterest'] * 100 * ((row['bid'] + row['ask'])/2)
+                        credit += oi * 100 * ((row['bid'] + row['ask'])/2)
 
             maxpain = maxpain.append({"price" : price, "putcash" : putcash, "callcash": callcash, "debit" : putcash + callcash, "credit" : credit}, ignore_index = True)
 
@@ -49,9 +46,9 @@ def max_pain(date, symbol):
             strike = row['strike']
             if strike == mp:
                 if row["CALL"] == False:
-                    mp_POI = row['openInterest']
+                    mp_POI = row['openInterest'] + int(row['volume'])
                 else:
-                    mp_COI = row['openInterest']
+                    mp_COI = row['openInterest'] + int(row['volume'])
 
         debit = millify(maxpain.sort_values(by="debit").iloc[0]["debit"])
         credit = millify(maxpain.sort_values(by="debit").iloc[0]["credit"])
