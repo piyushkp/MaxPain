@@ -6,12 +6,12 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 def get_stocks_in_max_pain(date, symbols):
     mp_list = []
     for symbol in symbols:
-        mp, mp_COI, mp_POI, total = max_pain(date, symbol)
+        mp, mp_COI, mp_POI, credit, debit = max_pain(date, symbol)
         if mp is not None:
             cp = get_current_price(symbol)
             per = percentage(cp, mp)
             if (per >= 95 and per <= 105):
-                print("{0}={1}   date={2}   MaxPain={3}   call_OI={4}   put_OI={5}  $={6}".format(symbol, cp, date, mp, mp_COI, mp_POI, total))
+                print("{0}={1}   date={2}   MaxPain={3}   call_OI={4}   put_OI={5}  credit={6} debit={7}".format(symbol, cp, date, mp, mp_COI, mp_POI, credit, debit))
                 mp_list.append((symbol, cp, date, mp, mp_COI, mp_POI))
 
     return mp_list

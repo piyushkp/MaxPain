@@ -17,20 +17,32 @@ def max_pain(date, symbol):
         maxpain = pd.DataFrame()  
         for value in list(get_strike_prices(data)): 
             price = value
-            putcash = callcash = 0.0
+            putcash = callcash = credit = 0.0
             for index, row in data.iterrows():
                 strike = row['strike']
-                if strike > price and row["CALL"] == False:
-                    oi = row['openInterest']
-                    if pd.isna(oi) is False:
-                        putcash += (strike - price) * oi * 100
-                if strike < price and row["CALL"] == True:
-                    oi = row['openInterest']
-                    if pd.isna(oi) is False:
-                        callcash += (price - strike) * oi * 100
-            maxpain = maxpain.append({"price" : price, "putcash" : putcash, "callcash": callcash, "total" : putcash + callcash}, ignore_index = True)
+                if strike > price:
+                    if row["CALL"] == False:
+                        oi = row['openInterest']
+                        if pd.isna(oi) is False:
+                            putcash += (strike - price) * oi * 100
+                    else:
+                        if pd.isna(row['openInterest']) is False:
+                            credit += (strike - price) * row['openInterest'] * 100
+                elif strike < price:
+                    if row["CALL"] == True:
+                        oi = row['openInterest']
+                        if pd.isna(oi) is False:
+                            callcash += (price - strike) * oi * 100
+                    else:
+                        if pd.isna(row['openInterest']) is False:
+                            credit += (price - strike) * row['openInterest'] * 100
+                else:
+                    if pd.isna(row['openInterest']) is False:
+                            credit += row['openInterest'] * 100 * ((row['bid'] + row['ask'])/2)
 
-        mp = maxpain.sort_values(by="total").iloc[0]["price"]
+            maxpain = maxpain.append({"price" : price, "putcash" : putcash, "callcash": callcash, "debit" : putcash + callcash, "credit" : credit}, ignore_index = True)
+
+        mp = maxpain.sort_values(by="debit").iloc[0]["price"]
         mp_POI = None
         mp_COI = None
         for index, row in data.iterrows():
@@ -41,12 +53,13 @@ def max_pain(date, symbol):
                 else:
                     mp_COI = row['openInterest']
 
-        total = millify(maxpain.sort_values(by="total").iloc[0]["total"])
+        debit = millify(maxpain.sort_values(by="debit").iloc[0]["debit"])
+        credit = millify(maxpain.sort_values(by="debit").iloc[0]["credit"])
         #print("{0}={1}   {2}   MaxPain: {3}".format(symbol, cp, date, mp))
-        return mp, mp_COI, mp_POI, total
+        return mp, mp_COI, mp_POI, credit, debit
     except BaseException as err:
         #print("exception: {0}.".format(err))
-        return None, None, None, None
+        return None, None, None, None, None
 
 
 def get_strike_prices(data):
